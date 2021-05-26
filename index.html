@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;700&family=Lato:wght@400;700&display=swap"
+            rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Life Calender</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                width: 100%;
+                font-family: 'Josefin Sans', sans-serif;
+                margin: 0;
+            }
+
+            html {
+                height: 100%;
+            }
+
+            body {
+                min-height: 100%;
+                background-color: #005c83;
+                overflow: hidden;
+                overflow-y: auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+            }
+
+            div.main {
+                display: flex;
+                width: 971px;
+                margin-bottom: 100px;
+                flex-wrap: wrap;
+            }
+
+            .dot {
+                background-color: #0027386c;
+                width: 8px;
+                height: 8px;
+                display: block;
+                margin: 2px;
+                border-radius: 4px;
+                position: relative;
+            }
+
+            .dot.m {
+                opacity: 0;
+            }
+
+            .dot.h.m,
+            .dot.h2.m {
+                display: none;
+            }
+
+            .dot.rdy {
+                opacity: 1;
+                animation: fade ease 0.5s;
+            }
+
+            @keyframes fade {
+                from {
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: scale(0);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                    visibility: visible;
+                }
+            }
+
+            .dot.rdyh {
+                opacity: 1;
+                z-index: 1000;
+                animation: fadeh ease-in 2.5s;
+            }
+
+            @keyframes fadeh {
+                from {
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: scale(3);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                    visibility: visible;
+                }
+            }
+
+            .dot.ac {
+                background-color: #00b3ff;
+            }
+
+            .dot.h::before,
+            .dot.h2::before {
+                content: "";
+                width: 32px;
+                height: 32px;
+                position: absolute;
+                background-color: rgba(255, 255, 255, 0.74);
+
+                z-index: 1000;
+                border-radius: 16px;
+            }
+
+            .dot.h::before {
+                top: -11px;
+                left: -10px;
+            }
+
+            .dot.h2::before {
+                top: -12px;
+                left: 0px;
+            }
+
+            .dot.rdyh.h::before {
+                animation: flash 2.5s cubic-bezier(0.495, 0.045, 0.515, 0.980) infinite;
+            }
+
+            .dot.rdyh.h2::before {
+                width: 16px;
+                height: 16px;
+                top: -4px;
+                left: -3px;
+                animation: flash 2.5s cubic-bezier(0.915, 0.640, 0.045, 0.615) infinite;
+            }
+
+            @keyframes flash {
+                0% {
+                    transform: scale(1);
+                    background-color: rgba(255, 255, 255, 0.5);
+                }
+
+                50% {
+                    transform: scale(1.25);
+                    background-color: rgba(255, 255, 255, 0.35);
+                }
+
+                100% {
+                    transform: scale(1);
+                    background-color: rgba(255, 255, 255, 0.5);
+                }
+            }
+
+            .title {
+                font-size: 1.6em;
+                color: white;
+                margin-top: 30px;
+                font-weight: 500;
+            }
+
+            .stitle {
+                font-size: 1.2em;
+                color: white;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-weight: 500;
+            }
+
+            .b {
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                margin-right: -0.2em;
+            }
+
+            .small {
+                color: rgba(233, 233, 233, 0.801);
+                margin-bottom: 12px;
+                font-family: 'Lato', sans-serif;
+            }
+
+            a {
+                color: #c8efff;
+                font-weight: 700;
+            }
+
+            strong {
+                font-weight: 700;
+            }
+
+            #page-root {
+                padding: 10px;
+                color: #ddd;
+            }
+
+            #dateinput {
+                border: none;
+                color: #fff;
+                background: none;
+                background-color: #004461;
+                padding: 10px;
+                border-radius: 10px;
+                margin-top: 10px;
+                width: 360px;
+                outline: none;
+                font-family: 'Lato', sans-serif;
+            }
+
+            #submitbutton {
+                border: none;
+                color: #fff;
+                background: none;
+                background-color: #049bf3;
+                padding: 10px;
+                border-radius: 10px;
+                margin-top: 10px;
+                width: 360px;
+                outline: none;
+                cursor: pointer;
+                font-weight: 700;
+                font-family: 'Lato', sans-serif;
+                transition: transform 0.2s ease;
+            }
+
+            #submitbutton:hover {
+                transform: scale(1.05) translateY(-1px)
+            }
+
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+            }
+
+            .ftr {
+                margin-top: 10px;
+                text-align: center;
+                font-size: 0.8em;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="title">Your <strong>Life Calender</strong></div>
+
+        <div id="page-root" style="display: block;">
+            <div>Type in your birth date to create a life calender!</div>
+            <div><input id="dateinput" type="date"></div>
+            <div><button id="submitbutton">Next</button></div>
+            <div class="ftr">Made with an existential crisis by <a target="_blank"
+                    href="https://twitter.com/brixsterplanet">Brixster</a></div>
+        </div>
+        <div id="cal" style="display: none;">
+            <div class="stitle">With a life expectancy of 100 years, you have <span class="b" id="ws"></span> out of <span
+                    class="b" id="wt"></span> weeks remaining in your life. Let's make it count!</div>
+            <div class="small">Based loosly on a really awesome <a target="_blank"
+                    href="https://www.youtube.com/watch?v=JXeJANDKwDc">Kurzgesagt – In a Nutshell video</a><br><a
+                    href="javascript:back()">Back</a></div>
+            <div id="main" class="main">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            'use strict'
+            if (window.navigator.userAgent.indexOf("MSIE ") > 0 || window.navigator.userAgent.indexOf("Opera") > 0) {
+                alert("NOTICE: This page may not function correctly on Internet Explorer and Opera browsers.")
+            }
+
+            function back() {
+                history.pushState("", document.title, window.location.pathname);
+                window.location.reload()
+            }
+            let pgroot = document.getElementById("page-root"),
+                form = document.getElementById("cal")
+
+            function g(date) {
+                let main = document.getElementById("main"),
+                    ws = document.getElementById("ws"),
+                    wt = document.getElementById("wt")
+                pgroot.style.display = "none"
+                form.style.display = "block"
+                const wkc = 100 * 52
+                const ams = 0.75
+
+                function d(i, ac) {
+                    let a = document.createElement("div")
+                    a.className = "dot m " + (ac ? " ac" : "")
+                    main.append(a)
+                    setTimeout(() => {
+                        a.className = "dot rdy " + (ac ? " ac" : "")
+                    }, i * ams)
+                    return a
+                }
+
+                function da() {
+                    let a = document.createElement("div")
+                    a.className = "dot m h"
+                    main.append(a)
+                    let a2 = document.createElement("div")
+                    a2.className = "dot m h2"
+                    a.append(a2)
+                    setTimeout(() => {
+                        a.className = "dot rdyh h"
+                        a2.className = "dot rdyh h2"
+                    }, wkc * ams)
+
+                }
+                let a
+                let wk = Math.floor(Math.round((new Date() - date)) / (7 * 24 * 60 * 60 * 1000))
+                for (let i = 0; i < wkc; i++) {
+                    if (i == wk)
+                        da()
+                    else
+                        d(i, (i > wk - 1))
+                    //if (i == wk)
+                    //    a = b;
+                }
+                setTimeout(() => {}, wkc * ams)
+
+                ws.innerHTML = wkc - wk
+                wt.innerHTML = wkc
+
+            }
+            let sbmbtn = document.getElementById("submitbutton"),
+                inp = document.getElementById("dateinput")
+            sbmbtn.addEventListener("click", () => {
+                let date = inp.valueAsDate
+                if (date === null) {
+                    alert("Invalid date! ..Or you just haven't filled out the form, yet.")
+                } else if (date > new Date()) {
+                    alert("Congratulations! You are yet to be born.")
+                } else if (date < new Date(new Date().setFullYear(new Date().getFullYear() - 100))) {
+                    alert(
+                        "You are far past the expected maximum life span of 100 years! Live your last few days in happiness...")
+                } else {
+                    if (date !== null)
+                        g(date)
+                }
+
+            });
+        </script>
+    </body>
+</html>
